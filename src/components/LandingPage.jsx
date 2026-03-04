@@ -32,7 +32,6 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Add shadow on scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -50,14 +49,16 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 backdrop-blur-xl bg-white/10 border-b border-white/10 ${
-        scrolled ? "shadow-2xl" : ""
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-black/40 backdrop-blur-2xl border-b border-white/10 shadow-lg"
+          : "bg-black/20 backdrop-blur-xl"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-
+        
         {/* Logo */}
-        <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+        <h1 className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 bg-clip-text text-transparent tracking-wide">
           Nikhil.dev
         </h1>
 
@@ -67,40 +68,46 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="relative text-white group transition-all duration-300"
+              className="relative text-gray-300 hover:text-white transition duration-300"
             >
               {link.name}
-              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
+              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-gradient-to-r from-cyan-400 to-purple-500 hover:w-full transition-all duration-300"></span>
             </a>
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 rounded-full bg-white/10 hover:bg-cyan-500/20 transition"
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+        {/* Mobile Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden text-white p-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
+        >
+          {mobileOpen ? <X size={26} /> : <Menu size={26} />}
+        </button>
       </div>
 
       {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-black/80 backdrop-blur-xl border-t border-white/10 px-6 py-6 space-y-4 text-center">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="block text-white hover:text-cyan-400 text-lg transition-all duration-300"
-              onClick={() => setMobileOpen(false)}
-            >
-              {link.name}
-            </a>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden mx-4 mb-4 rounded-2xl bg-gradient-to-br from-[#0f172a]/95 to-[#1e1b4b]/95 backdrop-blur-2xl border border-white/10 shadow-2xl p-6 space-y-5 text-center"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="block text-gray-300 hover:text-cyan-400 text-lg transition duration-300"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
@@ -109,91 +116,85 @@ const Navbar = () => {
 // Hero (UNCHANGED)
 // ============================
 const Hero = () => (
-  <section className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b] text-white px-6">
-    <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl"></div>
-    <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl"></div>
+  <section className="relative min-h-screen flex items-center pt-24 sm:pt-28 bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b] text-white px-6 sm:px-8 overflow-hidden">
+    
+    {/* Glow Background */}
+    <div className="absolute top-10 left-10 w-60 h-60 bg-purple-600/30 rounded-full blur-3xl animate-pulse"></div>
+    <div className="absolute bottom-10 right-10 w-60 h-60 bg-cyan-500/30 rounded-full blur-3xl animate-pulse"></div>
 
     <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+
+      {/* TEXT */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
+        className="text-center md:text-left"
       >
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
           Hi, I'm{" "}
           <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
             Nikhil Kute
           </span>
         </h1>
-        <p className="text-xl text-gray-300 mb-4">
+
+        <p className="text-lg sm:text-xl text-gray-300 mb-4">
           Java Developer | Spring Boot | Microservices
         </p>
-        <p className="text-gray-400 max-w-lg mb-6">
-          Passionate about building scalable backend systems, secure REST APIs,
-          JWT authentication, and production-ready full-stack applications with
-          clean architecture.
+
+        <p className="text-gray-400 max-w-xl mx-auto md:mx-0 mb-8">
+          I build scalable backend systems, secure REST APIs with JWT,
+          and production-ready full-stack applications using clean architecture.
         </p>
 
-        <div className="flex gap-4 flex-wrap">
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
           <a
             href="https://www.linkedin.com/in/nikhil-kute-java"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg hover:scale-105 transition"
+            className="px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-purple-600 hover:to-cyan-500 transition-all duration-300 shadow-lg hover:shadow-cyan-500/40 hover:scale-105"
           >
             Connect on LinkedIn
           </a>
+
           <a
             href="#projects"
-            className="px-6 py-3 rounded-full border border-white/20 hover:bg-white/10 transition"
+            className="px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 transition-all duration-300"
           >
             View Projects
           </a>
         </div>
 
-        <div className="flex gap-6 mt-8">
-  
-  {/* LinkedIn */}
-  <a
-    href="https://www.linkedin.com/in/nikhil-kute-java"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Linkedin className="hover:text-cyan-400 hover:scale-110 transition cursor-pointer" />
-  </a>
-
-  {/* GitHub */}
-  <a
-    href="https://github.com/Student-Nik"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <Github className="hover:text-cyan-400 hover:scale-110 transition cursor-pointer" />
-  </a>
-
-  {/* Email */}
-  <a href="mailto:nkute611@gmail.com">
-    <Mail className="hover:text-cyan-400 hover:scale-110 transition cursor-pointer" />
-  </a>
-
-</div>
+        {/* Social Icons */}
+        <div className="flex justify-center md:justify-start gap-6 mt-8 text-gray-300">
+          <a href="https://www.linkedin.com/in/nikhil-kute-java" target="_blank">
+            <Linkedin className="hover:text-cyan-400 hover:scale-125 transition duration-300" />
+          </a>
+          <a href="https://github.com/Student-Nik" target="_blank">
+            <Github className="hover:text-cyan-400 hover:scale-125 transition duration-300" />
+          </a>
+          <a href="mailto:nkute611@gmail.com">
+            <Mail className="hover:text-cyan-400 hover:scale-125 transition duration-300" />
+          </a>
+        </div>
       </motion.div>
 
+      {/* IMAGE */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
         className="flex justify-center"
       >
-        <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-3xl blur-xl opacity-60 group-hover:opacity-100 transition"></div>
-          <div className="relative w-72 h-72 rounded-3xl bg-gray-900 flex items-center justify-center text-gray-500 border border-white/10">
-            <img
-              src= {photo}
-              alt="Nikhil Profile"
-              className="relative w-71 h-70 rounded-3xl bg-gray-900 flex items-center justify-center text-gray-500 border border-white/10 "
-            />
-          </div>
+        <div className="relative w-64 sm:w-72 md:w-80">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-3xl blur-2xl opacity-60"></div>
+
+          <img
+            src={photo}
+            alt="Nikhil Profile"
+            className="relative w-full h-auto object-cover rounded-3xl border border-white/10 shadow-2xl"
+          />
         </div>
       </motion.div>
     </div>
@@ -770,91 +771,141 @@ const Projects = () => {
   );
 };
 
-// ============================
-// Contact (UNCHANGED)
-// ============================
-const Contact = () => (
-  <section
-    id="contact"
-    className="relative py-28 px-6 bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b] text-white overflow-hidden"
-  >
-    {/* Background Glow */}
-    <div className="absolute top-0 left-0 w-72 h-72 bg-cyan-500/10 blur-3xl rounded-full"></div>
-    <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/10 blur-3xl rounded-full"></div>
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
 
-    <div className="max-w-2xl mx-auto relative z-10">
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
 
-      {/* Heading */}
-      <motion.h2
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl font-bold text-center mb-14 
-        bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 
-        bg-clip-text text-transparent"
-      >
-        Contact Me
-      </motion.h2>
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
-      {/* Form Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        whileHover={{ scale: 1.01 }}
-        className="p-10 rounded-3xl 
-        bg-white/5 backdrop-blur-2xl 
-        border border-white/10 
-        shadow-2xl hover:shadow-cyan-500/20 
-        transition-all duration-500"
-      >
-        <form className="space-y-6">
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setResponseMessage("");
 
-          <InputField type="text" placeholder="Your Name" />
-          <InputField type="email" placeholder="Your Email" />
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/contact/me",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        }
+      );
 
-          <motion.textarea
-            rows="4"
-            placeholder="Your Message"
-            className="w-full px-5 py-4 rounded-xl 
-            bg-white/10 border border-white/20 
-            focus:outline-none focus:border-cyan-400 
-            focus:ring-2 focus:ring-cyan-400/30 
-            transition-all duration-300 resize-none"
-            whileFocus={{ scale: 1.02 }}
-          />
+      const data = await response.text();
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full px-6 py-3 
-            bg-gradient-to-r from-cyan-500 to-purple-600 
-            rounded-full font-semibold 
-            shadow-lg hover:shadow-cyan-500/40 
-            transition-all duration-300"
-          >
-            Send Message
-          </motion.button>
-        </form>
+      if (response.ok) {
+        setResponseMessage("Thank you for contacting me. I have received your message and will respond shortly.");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setResponseMessage("❌ " + data);
+      }
+    } catch (error) {
+      setResponseMessage("❌ Server error. Try again later.");
+    }
 
-        {/* Divider */}
-        <div className="my-10 border-t border-white/10"></div>
+    setLoading(false);
+  };
 
-        {/* Social Links */}
-        <div className="flex justify-center gap-6">
-          <SocialIcon icon={<Mail size={20} />} link="mailto:nkute611@gmail.com" />
-          <SocialIcon icon={<Github size={20} />} link="https://github.com/Student-Nik" />
-          <SocialIcon icon={<Linkedin size={20} />} link="www.linkedin.com/in/nikhil-kute-java" />
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
+  return (
+    <section
+      id="contact"
+      className="relative py-28 px-6 bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e1b4b] text-white overflow-hidden"
+    >
+      <div className="max-w-2xl mx-auto relative z-10">
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl font-bold text-center mb-14 
+          bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 
+          bg-clip-text text-transparent"
+        >
+          Contact Me
+        </motion.h2>
 
-const InputField = ({ type, placeholder }) => (
+        <motion.div
+          className="p-10 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10"
+        >
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            
+            <InputField
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Your Name"
+            />
+
+            <InputField
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Your Email"
+            />
+
+            <motion.textarea
+              rows="4"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              placeholder="Your Message"
+              className="w-full px-5 py-4 rounded-xl 
+              bg-white/10 border border-white/20 
+              focus:outline-none focus:border-cyan-400 
+              focus:ring-2 focus:ring-cyan-400/30 
+              transition-all duration-300 resize-none"
+              whileFocus={{ scale: 1.02 }}
+              required
+            />
+
+            <motion.button
+              type="submit"
+              disabled={loading}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full px-6 py-3 
+              bg-gradient-to-r from-cyan-500 to-purple-600 
+              rounded-full font-semibold 
+              shadow-lg transition-all duration-300"
+            >
+              {loading ? "Sending..." : "Send Message"}
+            </motion.button>
+          </form>
+
+          {responseMessage && (
+            <p className="mt-6 text-center text-sm">
+              {responseMessage}
+            </p>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const InputField = ({ type, name, value, onChange, placeholder }) => (
   <motion.input
     type={type}
+    name={name}
+    value={value}
+    onChange={onChange}
     placeholder={placeholder}
+    required
     className="w-full px-5 py-4 rounded-xl 
     bg-white/10 border border-white/20 
     focus:outline-none focus:border-cyan-400 
@@ -862,23 +913,6 @@ const InputField = ({ type, placeholder }) => (
     transition-all duration-300"
     whileFocus={{ scale: 1.02 }}
   />
-);
-
-const SocialIcon = ({ icon, link }) => (
-  <motion.a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    whileHover={{ scale: 1.15 }}
-    whileTap={{ scale: 0.9 }}
-    className="p-4 rounded-full 
-    bg-white/10 border border-white/20 
-    hover:border-cyan-400/40 
-    hover:shadow-cyan-500/30 
-    transition-all duration-300"
-  >
-    {icon}
-  </motion.a>
 );
 
 // ============================
