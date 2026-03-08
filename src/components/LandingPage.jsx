@@ -805,7 +805,7 @@ const Contact = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/contact/me",
+        "https://portfoliobackend-ck7x.onrender.com/api/contact/me",
         {
           method: "POST",
           headers: {
